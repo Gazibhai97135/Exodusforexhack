@@ -1,0 +1,32 @@
+services:
+  # Web dashboard
+  - type: web
+    name: forex-dashboard
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app --bind 0.0.0.0:$PORT --workers 1 --timeout 120
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: CHANNEL_ID
+        sync: false
+      - key: TWELVE_DATA_KEY
+        sync: false
+      - key: WEBAPP_URL
+        sync: false
+
+  # Bot (background worker)
+  - type: worker
+    name: forex-bot
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: CHANNEL_ID
+        sync: false
+      - key: TWELVE_DATA_KEY
+        sync: false
+      - key: WEBAPP_URL
+        sync: false
